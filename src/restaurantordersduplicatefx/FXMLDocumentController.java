@@ -5,22 +5,17 @@
  */
 package restaurantordersduplicatefx;
 
-import java.net.URISyntaxException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
@@ -32,128 +27,97 @@ public class FXMLDocumentController implements Initializable
 {
 
     @FXML
-    TableView<TableInfo> tvDisplay;
-    @FXML
-    TableColumn<TableInfo, String> tcPre, tcOne, tcTwo, tcThree, tcFour, tcFive;
-    @FXML
     Button btnOverview, btnOrders, btnCustomers, btnMenus, btnPackages, btnSettings, btnSignOut;
-    @FXML
-    TextField tfSearchBar;
-    @FXML
-    Label lblDigitOne, lblDigitTwo, lblDigitThree, lblDigitFour;
-    @FXML
-    Label lblDescriptionOne, lblDescriptionTwo, lblDescriptionThree, lblDescriptionFour;
     @FXML
     ImageView ivDisplayImage;
     @FXML
     Label lblDisplayImageTitle;
     @FXML
-    StackPane spChangeDisplay;
-
-    ObservableList<TableInfo> tableData = FXCollections.observableArrayList();
+    StackPane spSubScene;
 
     @FXML
     private void handleBtnOnActionOverview(ActionEvent event)
     {
-        System.out.println("Load Overview FXML");
+        try {
+            System.out.println("Loading Overview FXML");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLOverView.fxml"));
+            loader.load();
+            FXMLOverViewController fXMLOverViewController = loader.getController();
+            spSubScene.getChildren().set(0, fXMLOverViewController.getVBoxRoot());
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
     private void handleBtnOnActionOrders(ActionEvent event)
     {
-        System.out.println("Load Orders FXML");
+        try {
+            System.out.println("Loading Orders FXML");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLOrders.fxml"));
+            loader.load();
+            FXMLOrdersController fXMLOrdersController = loader.getController();
+            spSubScene.getChildren().set(0, fXMLOrdersController.getVBoxRoot());
+        }
+        catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     @FXML
     private void handleBtnOnActionCustomers(ActionEvent event)
     {
-        System.out.println("Load Customers FXML");
+        try {
+            System.out.println("Loading Customers FXML");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLCustomers.fxml"));
+            loader.load();
+            FXMLCustomersController fXMLCustomersController = loader.getController();
+            spSubScene.getChildren().set(0, fXMLCustomersController.getVBoxRoot());
+        }
+        catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
     }
 
     @FXML
     private void handleBtnOnActionMenus(ActionEvent event)
     {
         System.out.println("Load Menus FXML");
+        System.out.println("You have to implement this!");
     }
 
     @FXML
     private void handleBtnOnActionPackages(ActionEvent event)
     {
         System.out.println("Load Packages FXML");
+        System.out.println("You have to implement this!");
     }
 
     @FXML
     private void handleBtnOnActionSettings(ActionEvent event)
     {
         System.out.println("Load Settings FXML");
+        System.out.println("You have to implement this!");
     }
 
     @FXML
     private void handleBtnOnActionSignOut(ActionEvent event)
     {
         System.out.println("just Sign Out FXML");
+        System.out.println("You might want to use an Alert that ask if they are sure they want to sign out.");
+        Platform.exit();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
-        try {
-            // TODO
-            setupTableView();
-            tableData.add(new TableInfo(getClass().getResource("/images/icons8_GPS_Antenna_64px_1.png").toURI().toString(), "KeepToo", "JFK", "10/11/2018", "$200", "active"));
-        }
-        catch (URISyntaxException ex) {
-            ex.printStackTrace();
-        }
 
+        // TODO
     }
 
-    public void setupTableView()
+    public void setSubSceneNode(Parent parent)
     {
-        tcPre.prefWidthProperty().bind(tvDisplay.widthProperty().multiply(.16));
-        tcOne.prefWidthProperty().bind(tvDisplay.widthProperty().multiply(0.16));
-        tcTwo.prefWidthProperty().bind(tvDisplay.widthProperty().multiply(0.16));
-        tcThree.prefWidthProperty().bind(tvDisplay.widthProperty().multiply(0.16));
-        tcFour.prefWidthProperty().bind(tvDisplay.widthProperty().multiply(0.16));
-        tcFive.prefWidthProperty().bind(tvDisplay.widthProperty().multiply(0.16));
-        tcPre.setResizable(false);
-        tcOne.setResizable(false);
-        tcTwo.setResizable(false);
-        tcThree.setResizable(false);
-        tcFour.setResizable(false);
-        tcFive.setResizable(false);
-
-        tcOne.setCellValueFactory(new PropertyValueFactory("tcOne"));
-        tcTwo.setCellValueFactory(new PropertyValueFactory("tcTwo"));
-        tcThree.setCellValueFactory(new PropertyValueFactory("tcThree"));
-        tcFour.setCellValueFactory(new PropertyValueFactory("tcFour"));
-        tcFive.setCellValueFactory(new PropertyValueFactory("tcFive"));
-
-        tcPre.setCellFactory((param) -> {
-            ImageView imageView = new ImageView();
-
-            return new TableCell<TableInfo, String>()
-            {
-                @Override
-                protected void updateItem(String item, boolean empty)
-                {
-                    super.updateItem(item, empty);
-                    if (item == null || empty) {
-                        setText(null);
-                        setGraphic(null);
-                    }
-                    else {
-                        System.out.println("test");
-                        System.out.println(item);
-                        imageView.setImage(new Image(item));
-                        setGraphic(imageView);
-                    }
-                }
-            };
-        });
-//
-
-        tvDisplay.setItems(tableData);
-
+        spSubScene.getChildren().add(parent);
     }
 }

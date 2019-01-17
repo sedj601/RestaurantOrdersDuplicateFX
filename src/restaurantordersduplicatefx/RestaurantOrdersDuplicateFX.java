@@ -7,7 +7,6 @@ package restaurantordersduplicatefx;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -21,9 +20,17 @@ public class RestaurantOrdersDuplicateFX extends Application
     @Override
     public void start(Stage stage) throws Exception
     {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        FXMLLoader rootLoader = new FXMLLoader(getClass().getResource("FXMLDocument.fxml"));
+        rootLoader.load();
+        FXMLDocumentController fXMLDocumentController = rootLoader.getController();
 
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLOrders.fxml"));
+        loader.load();
+        FXMLOrdersController fXMLOrdersController = loader.getController();
+
+        fXMLDocumentController.setSubSceneNode(fXMLOrdersController.getVBoxRoot());
+
+        Scene scene = new Scene(rootLoader.getRoot());
 
         stage.setScene(scene);
         stage.show();
